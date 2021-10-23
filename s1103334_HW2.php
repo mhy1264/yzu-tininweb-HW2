@@ -9,6 +9,30 @@ $pdf->setPrintFooter(false);
 $pdf->SetFont('cid0jp','', 18); 
 $pdf->AddPage();
 
+//$pdf->SetFont('helvetica', '', 10);
+
+// define barcode style
+$style = array(
+    'position' => '',
+    'align' => 'C',
+    'stretch' => false,
+    'fitwidth' => true,
+    'cellfitalign' => '',
+    'border' => true,
+    'hpadding' => 'auto',
+    'vpadding' => 'auto',
+    'fgcolor' => array(0,0,0),
+    'bgcolor' => false, //array(255,255,255),
+    'text' => true,
+    'font' => 'helvetica',
+    'fontsize' => 8,
+    'stretchtext' => 4
+);
+
+// PRINT VARIOUS 1D BARCODES
+
+// CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.
+$pdf->write1DBarcode('CODE 39', 'C39', '', '', '', 18, 0.4, $style, 'N');
 $name = $_POST['name'];
 $phone = $_POST['phone'];
 $stuid = $_POST['stuid'];
@@ -19,7 +43,7 @@ $mail = $_POST['email'];
 
 $html = <<<EOF
 <h2>[After 2021] 測試</h2>
-<table>
+<table border="1">
 	<tr>
 		<td>姓名</td>
 		<td>$name</td>
