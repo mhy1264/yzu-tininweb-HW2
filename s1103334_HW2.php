@@ -1,9 +1,35 @@
 <?php
 require_once('./TCPDF/tcpdf_import.php');
-/*Generate qr code*/
- include "./phpqrcode/qrlib.php"; // 引用 PHP QR code
 
-QRcode::png('code data text', 'filename.png')
+$name = $_POST['name'];
+$phone = $_POST['phone'];
+$stuid = $_POST['stuid'];
+$meal = $_POST['meal'];
+$Association = $_POST['Association'];
+$class = $_POST['class'];
+$mail = $_POST['email'];
+
+/* send qrcode  */
+include 'phpqrcode/qrlib.php';
+$tempDir = EXAMPLE_TMP_SERVERPATH;
+
+$codeContents = 'your message here...';
+
+$fileName = '$stuid.png';
+
+$pngAbsoluteFilePath = $tempDir.$fileName;
+$urlRelativeFilePath = EXAMPLE_TMP_URLRELPATH.$fileName;
+
+QRcode::png($codeContents, $pngAbsoluteFilePath); 
+/*send mail */
+
+$to =" mhy1264@gmail.com "; //收件者
+$subject = "test"; //信件標題
+$msg = "smtp發信測試";//信件內容
+$headers = "From: admin@your.com"; //寄件者
+
+mail("$to", "$subject", "$msg", "$headers");
+
 /*---------------- Print PDF Start -----------------*/
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->SetCreator(PDF_CREATOR);
@@ -11,6 +37,7 @@ $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(false);
 $pdf->SetFont('cid0jp','', 18); 
 $pdf->AddPage();
+
 
 // define barcode style
 $style = array(
@@ -29,17 +56,12 @@ $style = array(
     'fontsize' => 8,
     'stretchtext' => 4
 );
-$pdf->write1DBarcode('CODE 39', 'C39', '', '', '', 18, 0.4, $style, 'N');
-$name = $_POST['name'];
-$phone = $_POST['phone'];
-$stuid = $_POST['stuid'];
-$meal = $_POST['meal'];
-$Association = $_POST['Association'];
-$class = $_POST['class'];
-$mail = $_POST['email'];
+// CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.
+$pdf->write1DBarcode('AFTER21 0000001', 'C39', '', '', '', 18, 0.4, $style, 'N');
+
 
 $html = <<<EOF
-<h2>[After 2021] 測試</h2>
+<h2>[After 2021] 報名表</h2>
 <table border="1">
 	<tr>
 		<td>姓名</td>
@@ -50,26 +72,24 @@ $html = <<<EOF
 	
 	<tr>
 		<td>學號</td>
-		<td>$stuid</td>
+		<td style="font-family : corier" >$stuid</td>
 		<td>食物</td>
-		<td>$meal</td>
+		<td style="font-family : corier" >$meal</td>
 	</tr>
 	
 	<tr>
 		<td>學系</td>
-		<td>$Association</td>
+		<td style="font-family : corier" >$Association</td>
 		<td>班級</td>
-		<td>$class</td>
+		<td style="font-family : corier" >$class</td>
 	</tr>
 	
 	<tr>
 		<td>email</td>
-		<td colspan="3">$mail</td>
+		<td style="font-family : corier" colspan="3">$mail</td>
 	</tr>
 </table>
-<img src="'.EXAMPLE_TMP_URLRELPATH.'006_L.png" />
 
-    
 EOF;
 
 /*---------------- Print PDF End -------------------*/
@@ -78,5 +98,4 @@ $pdf->writeHTML($html);
 $pdf->lastPage();
 $pdf->Output('order.pdf', 'I');
 
-	
 ?>
