@@ -8,28 +8,52 @@ $meal = $_POST['meal'];
 $Association = $_POST['Association'];
 $class = $_POST['class'];
 $mail = $_POST['email'];
+/*---------------- Sent Mail Start -----------------*/
 
-/* send qrcode  */
-include 'phpqrcode/qrlib.php';
-$tempDir = EXAMPLE_TMP_SERVERPATH;
+$from = "s1103334@mail.yzu.edu.tw";
+$subject = "[After 2021] 報名確認信";
+$subject = "=?UTF-8?B?".base64_encode($subject)."?=";
+$attach_filename = date("Y-m-d") . ".html";
 
-$codeContents = 'your message here...';
+$emailBody =  "
+hi~ $name ~~~
+email: $mail
+phone: $phone
+報名成功!!!
+";
 
-$fileName = '$stuid.png';
+# 然後我們要作為附件的HTML檔案 
+$attachment =  "<html>
+<head>
+<title>The attached file</title>
+</head>
+<body>
+<h2>This is the attached HTML file</h2>
+</body>
+</html>";
 
-$pngAbsoluteFilePath = $tempDir.$fileName;
-$urlRelativeFilePath = EXAMPLE_TMP_URLRELPATH.$fileName;
+$boundary = uniqid("");
 
-QRcode::png($codeContents, $pngAbsoluteFilePath); 
-/*send mail */
+$headers =  "From: $from
+To: $to
+Content-type: multipart/mixed; boundary=\"$boundary\"";
 
-$to =" mhy1264@gmail.com "; //收件者
-$subject = "test"; //信件標題
-$msg = "smtp發信測試";//信件內容
-$headers = "From: admin@your.com"; //寄件者
+$emailBody =  "--$boundary
+Content-type: text/plain; charset=utf-8
+Content-transfer-encoding: 8bit
 
-mail("$to", "$subject", "$msg", "$headers");
+$emailBody
 
+--$boundary
+Content-type: text/html; name=$attach_filename
+Content-disposition: inline; filename=$attach_filename
+Content-transfer-encoding: 8bit
+
+$attachment
+
+--$boundary--";
+
+mail("[email protected]", $subject, $emailBody, $headers);
 /*---------------- Print PDF Start -----------------*/
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->SetCreator(PDF_CREATOR);
