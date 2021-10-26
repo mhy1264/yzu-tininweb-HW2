@@ -1,6 +1,9 @@
 <?php
 require_once('./TCPDF/tcpdf_import.php');
+/*Generate qr code*/
+ include "./phpqrcode/qrlib.php"; // 引用 PHP QR code
 
+QRcode::png('code data text', 'filename.png')
 /*---------------- Print PDF Start -----------------*/
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->SetCreator(PDF_CREATOR);
@@ -8,8 +11,6 @@ $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(false);
 $pdf->SetFont('cid0jp','', 18); 
 $pdf->AddPage();
-
-//$pdf->SetFont('helvetica', '', 10);
 
 // define barcode style
 $style = array(
@@ -28,10 +29,6 @@ $style = array(
     'fontsize' => 8,
     'stretchtext' => 4
 );
-
-// PRINT VARIOUS 1D BARCODES
-
-// CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.
 $pdf->write1DBarcode('CODE 39', 'C39', '', '', '', 18, 0.4, $style, 'N');
 $name = $_POST['name'];
 $phone = $_POST['phone'];
@@ -70,7 +67,9 @@ $html = <<<EOF
 		<td colspan="3">$mail</td>
 	</tr>
 </table>
+<img src="'.EXAMPLE_TMP_URLRELPATH.'006_L.png" />
 
+    
 EOF;
 
 /*---------------- Print PDF End -------------------*/
@@ -79,4 +78,5 @@ $pdf->writeHTML($html);
 $pdf->lastPage();
 $pdf->Output('order.pdf', 'I');
 
+	
 ?>
