@@ -10,10 +10,28 @@ $class = $_POST['class'];
 $mail = $_POST['email'];
 /*---------------Gerenate qr code -----------------*/
 
-/*---------------Link to <SQL-----------------------*/
+/*---------------Add to SQL-----------------------*/
+//ref: CREATE TABLE info( Name text ,phone text ,stuid text)
+$host = 'localhost';
+$dbuser ='CS380B';
+$dbpassword = 'CS380B';
+$dbname = 'CS380B';
 
+// Create connection
+$conn = new mysqli($host, $dbuser, $dbpassword , $dbname);
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
 
-/*---------------- Sent Mail Start -----------------*/
+$sql = "INSERT INTO s1103334  (name, phone, stuid)
+VALUES ('$name', '$phone', '$stuid')";
+
+$conn->query($sql);
+
+$conn->close();
+$conn->close();
+/*---------------- Sent Mail Start -----------------
 
 $from = "s1103334@mail.yzu.edu.tw";
 $subject = "[After 2021] 報名確認信";
@@ -58,7 +76,7 @@ $attachment
 
 --$boundary--";
 
-mail($mail, $subject, $emailBody, $headers);
+mail($mail, $subject, $emailBody, $headers);*/
 /*---------------- Print PDF Start -----------------*/
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->SetCreator(PDF_CREATOR);
