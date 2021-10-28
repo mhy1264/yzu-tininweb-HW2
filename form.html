@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset = "utf-8">
+<title>Forms</title>
+</head>
+<body>
+<h1>課程滿意度調查</h1>
+<form method = "post" action = "test.php">
+    <p>
+    <label>請選擇課號
+        <select name = "class">
+            <option selected>CS106</option>
+            <option>CS380</option>
+        </select>
+    </label>
+    </p>
+    <p><label>姓名:<input name = "name" type = "text" size = "12"></label></p>
+    <p>
+    <strong>對本課程是否滿意:</strong><br>
+    <label><input name = "rating" type = "radio" value = "good" checked>
+    滿意</label>
+    <label><input name = "rating" type = "radio" value = "normal">普通</label>
+    <label><input name = "rating" type = "radio" value = "bad">不滿意</label>
+    </p>
+    <p>
+    <input type = "submit" value = "Submit">
+    <input type = "reset" value = "Clear">
+    </p>
+</form></body></html>
