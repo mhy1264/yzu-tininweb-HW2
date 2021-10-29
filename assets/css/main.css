@@ -4150,8 +4150,7 @@ input, select, textarea {
 	@media screen and (max-width: 360px) {
 
 		#footer .inner {
-			padding: 5em 5.5em 0.1em 1.5em ;
+			padding: 2em 1.5em 0.1em 1.5em ;
 		}
 
 	}
-	

@@ -24,8 +24,8 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "INSERT INTO s1103334  (name, phone, stuid)
-VALUES ('$name', '$phone', '$stuid')";
+$sql = "INSERT INTO s1103334  (name, phone, stuid,meal,Association,class,mail)
+VALUES ('$name', '$phone', '$stuid','$meal','$Association','$class','$mail')";
 
 $conn->query($sql);
 $conn->close();
