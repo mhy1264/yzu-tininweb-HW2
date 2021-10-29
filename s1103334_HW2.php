@@ -28,8 +28,6 @@ $sql = "INSERT INTO s1103334  (name, phone, stuid)
 VALUES ('$name', '$phone', '$stuid')";
 
 $conn->query($sql);
-
-$conn->close();
 $conn->close();
 /*---------------- Sent Mail Start -----------------*/
 
