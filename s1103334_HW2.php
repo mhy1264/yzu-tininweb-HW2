@@ -12,7 +12,7 @@ $mail = $_POST['email'];
 
 /*---------------Add to SQL-----------------------*/
 //ref: CREATE TABLE info( Name text ,phone text ,stuid text)
-$host = 'localhost';
+$host = '140.138.77.70';
 $dbuser ='CS380B';
 $dbpassword = 'CS380B';
 $dbname = 'CS380B';
@@ -24,13 +24,13 @@ if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
 }
 
-$sql ="SET NAMES UTF-8"
+$sql = "SET NAMES UTF8";
 $sql = "INSERT INTO s1103334  (name, phone, stuid,meal,Association,class,mail)
 VALUES ('$name', '$phone', '$stuid','$meal','$Association','$class','$mail')";
 
 $conn->query($sql);
 $conn->close();
-/*---------------- Sent Mail Start -----------------*/
+/*---------------- Sent Mail Start -----------------
 
 $from = "s1103334@mail.yzu.edu.tw";
 $subject = "[After 2021] 報名確認信";
@@ -75,7 +75,7 @@ $attachment
 
 --$boundary--";
 
-mail($mail, $subject, $emailBody, $headers);
+mail($mail, $subject, $emailBody, $headers);*/
 /*---------------- Print PDF Start -----------------*/
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->SetCreator(PDF_CREATOR);
