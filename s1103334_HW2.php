@@ -21,9 +21,10 @@ $dbname = 'CS380B';
 $conn = new mysqli($host, $dbuser, $dbpassword , $dbname);
 // Check connection
 if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+        die("Connection failed: " . $conn->connect_error);
 }
 
+$sql ="SET NAMES UTF-8"
 $sql = "INSERT INTO s1103334  (name, phone, stuid,meal,Association,class,mail)
 VALUES ('$name', '$phone', '$stuid','$meal','$Association','$class','$mail')";
 
