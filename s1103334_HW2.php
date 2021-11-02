@@ -10,6 +10,20 @@ $class = $_POST['class'];
 $mail = $_POST['email'];
 /*---------------Gerenate qr code -----------------*/
 
+include('phpqrcode/qrlib.php');
+
+    $tempDir = "/home/s1103334/public_html/yzu-tininweb-hw2/files/qr/";
+    
+    $codeContents = '/home/s1103334/public_html/yzu-tininweb-hw2/files/pdf/'.$ID.'.pdf';
+    
+    $fileName = $stuid.'.png';
+    
+    $pngAbsoluteFilePath = $tempDir.$fileName;
+    $urlRelativeFilePath = $tempDir.$fileName;
+    
+    if (!file_exists($pngAbsoluteFilePath)) {
+        QRcode::png($codeContents, $pngAbsoluteFilePath);
+    } 
 /*---------------Add to SQL-----------------------*/
 //ref: CREATE TABLE info( Name text ,phone text ,stuid text)
 $host = '140.138.77.70';
@@ -30,7 +44,7 @@ VALUES ('$name', '$phone', '$stuid','$meal','$Association','$class','$mail')";
 
 $conn->query($sql);
 $conn->close();
-/*---------------- Sent Mail Start -----------------
+/*---------------- Sent Mail Start -----------------*/
 
 $from = "s1103334@mail.yzu.edu.tw";
 $subject = "[After 2021] 報名確認信";
@@ -51,6 +65,7 @@ $attachment =  "<html>
 </head>
 <body>
 <h2>This is the attached HTML file</h2>
+<img src='http://140.138.77.70/~s1103334/public_html/yzu-tininweb-hw2/files/qr/$stuid.png'/>
 </body>
 </html>";
 
@@ -75,7 +90,7 @@ $attachment
 
 --$boundary--";
 
-mail($mail, $subject, $emailBody, $headers);*/
+mail($mail, $subject, $emailBody, $headers);
 /*---------------- Print PDF Start -----------------*/
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->SetCreator(PDF_CREATOR);
@@ -142,6 +157,7 @@ EOF;
 
 $pdf->writeHTML($html);
 $pdf->lastPage();
+$pdf->Output('/home/s1103334/public_html/yzu-tininweb-hw2/files/pdf/'.$ID.'.pdf', 'F');
 $pdf->Output('order.pdf', 'I');
 
 ?>
