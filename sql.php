@@ -25,7 +25,7 @@ VALUES ('乾泰', 'a', 'g','f','d','s')";
 
 if ($conn->query($sql) === TRUE) {
   echo "New record created successfully";
-} else {
+} else {    
   echo "Error: " . $sql . "<br>" . $conn->error;
 }
 

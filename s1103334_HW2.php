@@ -11,19 +11,15 @@ $mail = $_POST['email'];
 /*---------------Gerenate qr code -----------------*/
 
 include('phpqrcode/qrlib.php');
+$tempDir = "files/qr/";
+$codeContents = 'http://140.138.77.70/~s1103334/yzu-tininweb-hw2/files/pdf/'.$stuid.'.pdf';
+$fileName = $stuid.'.png';
+$filePath = $tempDir.$fileName;
+if (!file_exists($filePath))        
+{
+    QRcode::png($codeContents,$filePath);
+} 
 
-    $tempDir = "/home/s1103334/public_html/yzu-tininweb-hw2/files/qr/";
-    
-    $codeContents = '/home/s1103334/public_html/yzu-tininweb-hw2/files/pdf/'.$ID.'.pdf';
-    
-    $fileName = $stuid.'.png';
-    
-    $pngAbsoluteFilePath = $tempDir.$fileName;
-    $urlRelativeFilePath = $tempDir.$fileName;
-    
-    if (!file_exists($pngAbsoluteFilePath)) {
-        QRcode::png($codeContents, $pngAbsoluteFilePath);
-    } 
 /*---------------Add to SQL-----------------------*/
 //ref: CREATE TABLE info( Name text ,phone text ,stuid text)
 $host = '140.138.77.70';
@@ -46,51 +42,20 @@ $conn->query($sql);
 $conn->close();
 /*---------------- Sent Mail Start -----------------*/
 
-$from = "s1103334@mail.yzu.edu.tw";
-$subject = "[After 2021] 報名確認信";
-$subject = "=?UTF-8?B?".base64_encode($subject)."?=";
-$attach_filename = date("Y-m-d") . ".html";
+$charset = 'UTF-8';
+$to = $_POST['email'];
+$sub = "[After 21] 報名成功";
+$msg = "<p>hi~~~ $name ~ 報名成功!"
+."<img src='http://140.138.77.70/~s1103334/yzu-tininweb-hw2/files/qr/$stuid.png' alt='qrcode' />";
+$headers = "MIME-Version: 1.0\r\n"
+."Content-type: text/html; charset=$charset\r\n"
+.'From: <after21@140.238.242.144>'."\r\n";
 
-$emailBody =  "
-hi~ $name ~~~
-email: $mail
-phone: $phone
-報名成功!!!
-";
 
-# 然後我們要作為附件的HTML檔案 
-$attachment =  "<html>
-<head>
-<title>The attached file</title>
-</head>
-<body>
-<h2>This is the attached HTML file</h2>
-<img src='http://140.138.77.70/~s1103334/public_html/yzu-tininweb-hw2/files/qr/$stuid.png'/>
-</body>
-</html>";
 
-$boundary = uniqid("");
 
-$headers =  "From: $from
-To: $to
-Content-type: multipart/mixed; boundary=\"$boundary\"";
+mail($to,$sub,$msg,$headers);
 
-$emailBody =  "--$boundary
-Content-type: text/plain; charset=utf-8
-Content-transfer-encoding: 8bit
-
-$emailBody
-
---$boundary
-Content-type: text/html; name=$attach_filename
-Content-disposition: inline; filename=$attach_filename
-Content-transfer-encoding: 8bit
-
-$attachment
-
---$boundary--";
-
-mail($mail, $subject, $emailBody, $headers);
 /*---------------- Print PDF Start -----------------*/
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->SetCreator(PDF_CREATOR);
@@ -157,7 +122,6 @@ EOF;
 
 $pdf->writeHTML($html);
 $pdf->lastPage();
-$pdf->Output('/home/s1103334/public_html/yzu-tininweb-hw2/files/pdf/'.$ID.'.pdf', 'F');
 $pdf->Output('order.pdf', 'I');
-
+$pdf->Output('/home/s1103334/public_html/yzu-tininweb-hw2/files/pdf/'.$stuid.'.pdf', 'F');
 ?>
